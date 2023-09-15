@@ -27,8 +27,10 @@ var puppeteer = require('puppeteer');
   await page.type('#username', 'GintsM', { delay: 100 });
   await page.type('#password', 'Pozitivs@383', { delay: 100 });
 
-  const submit_password = '#submit';
-  await page.click(submit_password);
+  // const submit_password = '#submit';
+  // await page.click(submit_password);
+  const submit_password = await page.$('#submit');
+  await submit_password.click();
 
   var cookies = await page.cookies();
   console.log('We have cookies: \n', 'Unkoment next line if You want to see them');
@@ -59,17 +61,19 @@ var puppeteer = require('puppeteer');
   process.stdin.on('data', data => {
     // console.log(`You typed ${data.toString()}`);
     let browser_closed = false;
+    let demo = "untouched";
     if (data.toString().substring(0, 13) === 'Browser close') {
 
       Promise.resolve(browser)
         .then(val => val.close())
         .then(() => {
-
-          console.log("Browser is closed \n, Want to exit? : Yes / No", browser_closed = true)
+          demo = 'Altered';
+          console.log("Browser is closed \n, Want to exit? : Yes / No", demo + " inside ")
         });
+      browser_closed = true;
     }
-    console.log('Browser_closed ', browser_closed);
-    if (browser_closed && data.toString().substring(0, 3) === 'Yes') process.exit();
+    console.log('Browser maybe closed ', demo);
+    if (data.toString().substring(0, 3) === 'Yes') process.exit();
   });
 
 
