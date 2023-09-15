@@ -1,0 +1,14 @@
+{
+  "name": "pupeteer-for-expens",
+  "version": "1.0.0",
+  "description": "test authentication-part",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "GintsM",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^21.1.1"
+  }
+}
