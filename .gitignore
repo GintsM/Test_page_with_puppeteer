@@ -3,3 +3,4 @@ cases.md
 test.js
 
 node_modules
+.env

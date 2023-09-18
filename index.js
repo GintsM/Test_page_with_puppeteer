@@ -1,5 +1,6 @@
 // import puppeteer from 'puppeteer';
 var puppeteer = require('puppeteer');
+require('dotenv').config();
 
 
 (async () => {
@@ -24,25 +25,18 @@ var puppeteer = require('puppeteer');
   }
 
   // Type into search box
-  await page.type('#username', 'GintsM', { delay: 100 });
-  await page.type('#password', 'Pozitivs@383', { delay: 100 });
+  await page.type('#username', process.env.username_admin, { delay: 100 });
+  await page.type('#password', process.env.password_admin, { delay: 100 });
 
   // const submit_password = '#submit';
   // await page.click(submit_password);
   const submit_password = await page.$('#submit');
   await submit_password.click();
 
-  var cookies = await page.cookies();
-  console.log('We have cookies: \n', 'Unkoment next line if You want to see them');
+  console.log('We have cookies: \n', 'Unkoment next 2 lines if You want to see them');
+  // var cookies = await page.cookies();
   // console.log('Ccookies: \n', cookies);
 
-  // .menu > p:nth-child(1) css for username
-  // let username = '';
-  // try {
-  //   username = await page.waitForSelector('.menu>p:nth-child(1)')
-  // } catch (error) {
-  //   console.log('Error on username')
-  // }
   const userHandle = await page.waitForSelector('.menu>p:nth-child(1)');
   const us_name = await page.evaluate(el => el.textContent, userHandle);
   // await userHandle.dispose();
@@ -56,34 +50,23 @@ var puppeteer = require('puppeteer');
   const logout = '.menu>p:nth-child(2) > a';
   await page.click(logout);
 
-  // console.log(logout, " Logout");
-  console.log('Probably you need to enter something :)');
+  // comment this to close interaction from terminal
+  console.log('Browser\'s work is done, enter \'Browser close\' to exit :)');
   process.stdin.on('data', data => {
-    // console.log(`You typed ${data.toString()}`);
-    let browser_closed = false;
-    let demo = "untouched";
     if (data.toString().substring(0, 13) === 'Browser close') {
 
       Promise.resolve(browser)
         .then(val => val.close())
         .then(() => {
-          demo = 'Altered';
-          console.log("Browser is closed \n, Want to exit? : Yes / No", demo + " inside ")
+          console.log("Browser is closed \n, Want to exit? : Yes / No")
         });
-      browser_closed = true;
     }
-    console.log('Browser maybe closed ', demo);
     if (data.toString().substring(0, 3) === 'Yes') process.exit();
   });
 
 
-
+  // uncomment if You do not want interaction from terminal
   // await browser.close();
 
 })();
-
-// process.stdin.on('data', data => {
-//   console.log(`You typed ${data.toString()}`);
-//   if (data === 'Yes') process.exit();
-// });
 
