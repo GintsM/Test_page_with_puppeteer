@@ -20,6 +20,11 @@ in page (which definetely are different in your),
 so be ready to rewrite some parts  
 To close browser need interaction from terminal, 
 at this moment (september, 2023) command when done is `browser close` on conformation browser is closed, enter `Yes` to close process.stdin
+If you want to enjoy how your page looks (on launch youshould pass headless: false) for a moment or want to pause for any other reason
+insert a line
+>`new Promise(r => setTimeout(r, 1000));`
+this will pause for 1 second as You got it time is in miliseconds
+
 
 ### License
  
