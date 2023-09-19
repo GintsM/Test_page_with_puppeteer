@@ -83,8 +83,9 @@ require('dotenv').config();
   *  
   */
 
-  const from_404_to_main = 'div>a';
-  await page.click(from_404_to_main);
+  // const from_404_to_main = ;
+  // await page.click(from_404_to_main);
+  await page.click('div>a');
 
   const userName = process.env.username_admin;
   // Type into search box
@@ -116,9 +117,38 @@ require('dotenv').config();
   const settings = '.menu > p:nth-child(1) > a:nth-child(1)';
   await page.click(settings);
 
-  // this is an array with all user properties
-  const profile_eval = await page.$$eval('li', (array) => array.map(el => el.textContent));
-  console.log(profile_eval);
+
+  let repeat = true;
+  let again = 0
+  while (again < 2) {
+    // this is an array with all user properties
+    const profile_eval = await page.$$eval('li', (array) => array.map(el => el.textContent));
+    // Collect prop values from settings in object
+    const user_prop = {}
+    for (let el of profile_eval) {
+      let position = el.search(':');
+      user_prop[el.slice(0, position).replace(/\s/g, '')] = el.slice(position + 1).trim();
+    }
+
+    test_cases.push({ name: 'Test_5.' + (again + 1), passed: Boolean(Object.keys(user_prop)[0]), description: 'user_props are empty' });
+
+    const form_values = await page.$$eval('input', (array) => array.map(el => el.value))
+    let count_equal = 0;
+    for (let key of Object.keys(user_prop)) {
+      if (form_values.includes(user_prop[key])) count_equal += 1;
+    }
+    if (count_equal >= 2) test_cases.push({ name: 'Test_5.' + (again + 2), passed: true, description: '' });
+    else test_cases.push({ name: 'Test_5.2', passed: false, description: 'there is less then 2 or none equalities in settings' });
+
+    // do not repeat this
+    if (repeat) {
+      await page.type('#userAddress', 'Address is added from Puppeteer', { delay: 100 });
+      await page.type('#comments', 'Comments is changed from Pupeteer', { delay: 100 });
+      await page.click(' form > input[type=submit]:nth-child(11)')
+    }
+    again += 1;
+    repeat = false;
+  }
 
   // create a pause uncommnent next line
   // new Promise(r => setTimeout(r, 5000));
