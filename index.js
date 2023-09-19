@@ -142,7 +142,15 @@ require('dotenv').config();
 
     // do not repeat this
     if (repeat) {
+      // clear and enter
+      await page.click('#userAddress', { count: 3 });
+      // await page.keyboard.down('Control');
+      // await page.keyboard.press('A');
+      // await page.keyboard.up('Control');
+      // await page.keyboard.press('Backspace');
       await page.type('#userAddress', 'Address is added from Puppeteer', { delay: 100 });
+
+      await page.click('#comments', { count: 3 });
       await page.type('#comments', 'Comments is changed from Pupeteer', { delay: 100 });
       await page.click(' form > input[type=submit]:nth-child(11)')
     }
